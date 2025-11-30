@@ -1,9 +1,19 @@
-<body>
-<div class="intro">
-  <canvas id="stars"></canvas>
-  <h1 id="typed"></h1>
-  <button id="enter">✨ Get Surprised ✨</button>
-</div>
+import {Engine} from "./engine.js";
+import {hearts} from "./particles.js";
 
-<script type="module" src="js/intro.js"></script>
-</body>
+const text = "Happy Birthday Kavimitha 🎀";
+let i = 0;
+
+(function type() {
+  if (i < text.length) {
+    Engine.qs("#typed").innerHTML += text[i++];
+    setTimeout(type, 65);
+  }
+})();
+
+hearts();
+
+Engine.qs("#enter").onclick = async () => {
+  await Engine.fadeOut();
+  location.href = "hub.html";
+};
