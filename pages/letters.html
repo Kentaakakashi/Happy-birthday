@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Letters 💌</title>
 
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/animations.css">
+
+</head>
+<body class="letters-bg fade-in">
+
+  <!-- Dark overlay for mood -->
+  <div class="overlay"></div>
+
+  <!-- Chat Container -->
+  <div class="chat-wrapper">
+
+    <div class="chat-header">
+      <span>💌 Letters</span>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <!-- Messages injected by JS -->
+    </div>
+
+    <div class="chat-footer">
+      <button id="nextBtn" disabled>Continue ➜</button>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { Engine } from "../js/engine.js";
+    import { Progress } from "../js/progress.js";
+
+    const messages = [
+      "Hey Kavimitha… 💛",
+      "I don’t even know where to start.",
+      "Somehow you became the best part of my days.",
+      "Your messages, your laugh, your roasts 😭",
+      "You changed the way ordinary days feel.",
+      "And honestly…",
+      "I don’t want a future where you’re not in it."
+    ];
+
+    const chatBody = document.getElementById("chatBody");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let index = 0;
+
+    async function typeMessage(text, side = "left") {
+      const msg = document.createElement("div");
+      msg.className = `msg ${side} typing`;
+      chatBody.appendChild(msg);
+
+      let i = 0;
+      while (i < text.length) {
+        msg.innerHTML += text.charAt(i);
+        i++;
+        await Engine.wait(45);
+      }
+
+      msg.classList.remove("typing");
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    async function playChat() {
+      for (let i = 0; i < messages.length; i++) {
+        const side = i % 2 === 0 ? "left" : "right";
+        await typeMessage(messages[i], side);
+        await Engine.wait(500);
+      }
+
+      nextBtn.disabled = false;
+      nextBtn.classList.add("glow");
+    }
+
+    playChat();
+
+    nextBtn.onclick = async () => {
+      Progress.unlock("letters");
+      await Engine.fadeOut();
+      location.href = "../hub.html";
+    };
+  </script>
+
+</body>
+</html>
